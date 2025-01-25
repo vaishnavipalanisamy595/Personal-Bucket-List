@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bucket List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>My Personal Bucket List</h1>
+    </header>
+    <main>
+        <ul id="bucket-list">
+            <li class="bucket-item" id="guitar">
+                Learn to play guitar<span>✔</span> 
+                <ul class="resources-list"></ul>
+            </li>
+            <li class="bucket-item" id="paris">
+                Visit Paris
+                <ul class="resources-list"></ul>
+            </li>
+            <li class="bucket-item" id="skydiving">
+                Go skydiving
+                <ul class="resources-list"></ul>
+            </li>
+            <li class="bucket-item" id="northern-lights">
+                Watch the Northern Lights
+                <ul class="resources-list"></ul>
+            </li>
+            <li class="bucket-item" id="marathon">
+                Run a marathon<span>✔</span> 
+                <ul class="resources-list"></ul>
+            </li>
+            <li class="bucket-item" id="write-book">
+                Write a book
+                <ul class="resources-list"></ul>
+            </li>
+            <li class="bucket-item" id="new-language">
+                Learn a new language
+                <ul class="resources-list"></ul>
+            </li>
+        </ul>
+
+        <form id="add-item-form">
+            <input type="text" id="new-item" placeholder="Add a new item..." required>
+            <button type="submit">Add Item</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2025 My Bucket List</p>
+    </footer>
+    <script>
+        const resourceData = {
+            "guitar": {
+                title: "Resources to Learn Guitar",
+                links: [
+                    { text: "JustinGuitar - Free Lessons", url: "https://www.justinguitar.com/" },
+                    { text: "Guitar Tricks - Online Courses", url: "https://www.guitartricks.com/" },
+                    { text: "YouTube - Guitar Lessons", url: "https://www.youtube.com/results?search_query=guitar+lessons" }
+                ]
+            },
+            "paris": {
+                title: "Resources to Plan Your Paris Trip",
+                links: [
+                    { text: "Lonely Planet - Paris Guide", url: "https://www.lonelyplanet.com/france/paris" },
+                    { text: "Paris Official Tourism Website", url: "https://en.parisinfo.com/" },
+                    { text: "10 Best Things to Do in Paris", url: "https://www.timeout.com/paris/en/things-to-do" }
+                ]
+            },
+            "skydiving": {
+                title: "Resources for Skydiving",
+                links: [
+                    { text: "USPA - Skydiving Safety", url: "https://uspa.org/" },
+                    { text: "Best Skydiving Locations Worldwide", url: "https://www.thetravel.com/best-skydiving-locations/" },
+                    { text: "Tips for First-Time Skydivers", url: "https://www.skydivetecumseh.com/first-time-skydivers/" }
+                ]
+            },
+            "northern-lights": {
+                title: "How to Watch the Northern Lights",
+                links: [
+                    { text: "Northern Lights Travel Guide", url: "https://www.aurora-service.eu/" },
+                    { text: "Best Places to See the Aurora", url: "https://www.nationalgeographic.com/travel/article/best-places-to-see-the-northern-lights" },
+                    { text: "Northern Lights Forecast", url: "https://www.spaceweatherlive.com/" }
+                ]
+            },
+            "marathon": {
+                title: "Marathon Training Resources",
+                links: [
+                    { text: "Couch to Marathon Training Plan", url: "https://www.runnersworld.com/" },
+                    { text: "Beginner's Guide to Running", url: "https://www.active.com/running/articles/running-for-beginners" },
+                    { text: "Top Marathons Around the World", url: "https://worldsmarathons.com/" }
+                ]
+            },
+            "write-book": {
+                title: "Resources to Write a Book",
+                links: [
+                    { text: "NaNoWriMo - National Novel Writing Month", url: "https://nanowrimo.org/" },
+                    { text: "Writer's Digest - Writing Tips", url: "https://www.writersdigest.com/" },
+                    { text: "The Creative Penn - Author Advice", url: "https://www.thecreativepenn.com/" }
+                ]
+            },
+            "new-language": {
+                title: "Resources to Learn a New Language",
+                links: [
+                    { text: "Duolingo - Free Language Learning", url: "https://www.duolingo.com/" },
+                    { text: "Babbel - Language Courses", url: "https://www.babbel.com/" },
+                    { text: "Memrise - Language Courses", url: "https://www.memrise.com/" }
+                ]
+            }
+        };
+
+        // Add resources to the clicked bucket item
+        document.getElementById("bucket-list").addEventListener("click", (e) => {
+            if (e.target.classList.contains("bucket-item")) {
+                const itemId = e.target.id;
+                const resourcesList = e.target.querySelector(".resources-list");
+                resourcesList.innerHTML = ""; // Clear existing resources
+
+                const resource = resourceData[itemId];
+                if (resource) {
+                    resource.links.forEach(link => {
+                        const li = document.createElement("li");
+                        const a = document.createElement("a");
+                        a.href = link.url;
+                        a.textContent = link.text;
+                        a.target = "_blank";
+                        li.appendChild(a);
+                        resourcesList.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement("li");
+                    li.textContent = "No resources available for this item.";
+                    resourcesList.appendChild(li);
+                }
+
+                // Toggle visibility of the resource list
+                resourcesList.style.display = 
+                    resourcesList.style.display === "block" ? "none" : "block";
+            }
+        });
+
+        // Add new items dynamically
+        document.getElementById("add-item-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const newItem = document.getElementById("new-item").value;
+
+            if (newItem.trim() !== "") {
+                const li = document.createElement("li");
+                li.textContent = newItem;
+                li.classList.add("bucket-item");
+                li.id = `item-${Date.now()}`;
+
+                const resourcesList = document.createElement("ul");
+                resourcesList.classList.add("resources-list");
+                li.appendChild(resourcesList);
+
+                document.getElementById("bucket-list").appendChild(li);
+                document.getElementById("new-item").value = "";
+            }
+        });
+    </script>
+</body>
+</html>
